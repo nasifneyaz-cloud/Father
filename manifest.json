@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "FatherCare \u2014 Diabetes & Daily Routine",
+  "name": "FatherCare \u2014 Daily Routine & Glucose Tracker",
   "short_name": "FatherCare",
-  "description": "A practical diabetes care tracker with medicine logs, glucose history, averages and a daily routine.",
+  "description": "A timed daily routine for father, glucose records, monthly averages, health advice and glucose-summary printing.",
   "lang": "en-IN",
   "start_url": "./",
   "scope": "./",
