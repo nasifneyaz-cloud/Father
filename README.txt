@@ -1,20 +1,22 @@
-FATHERCARE — DIABETES & HEALTH DASHBOARD — HOME-SCREEN PACKAGE
+FATHERCARE PWA — INSTALLATION NOTES
 
-CONTENTS
-- index.html: dashboard application
-- manifest.json: home-screen app metadata
-- service-worker.js: offline app-shell support
-- icon-192.png and icon-512.png: app icons
+Files:
+- index.html: the dashboard
+- manifest.json: installable app metadata
+- service-worker.js: offline app shell
+- icon-192.png, icon-512.png, icon-maskable-512.png: app icons (kept individually at the repository root)
+
+DEPLOY TO GITHUB PAGES
+1. Create/open a GitHub repository.
+2. Upload ALL six files directly into the repository's root (not inside a nested folder).
+3. Commit changes.
+4. Open repository Settings > Pages and enable deployment from the main branch / root (if not already enabled).
+5. Wait for GitHub Pages to publish. Open the HTTPS Pages URL in Chrome on Android.
+6. Refresh once, then use Chrome menu > Install app / Add to Home screen. The in-page Install app button appears when Chrome makes the install prompt available.
 
 IMPORTANT
-Android Chrome generally requires the app to be served over HTTPS before it can be installed as a proper home-screen PWA. Opening index.html directly from Downloads does not provide the full PWA installation experience.
-
-DEPLOYMENT
-1. Extract this ZIP into its own folder.
-2. Upload the contents to its own GitHub repository or separate HTTPS static-hosting path.
-3. On GitHub, enable Pages in Settings -> Pages, using the main branch and root folder.
-4. Open the resulting HTTPS URL in Chrome on Android and wait for the app to load.
-5. Open Chrome's three-dot menu and choose Install app or Add to Home screen (wording varies).
-6. Confirm the name and add it.
-
-Keep the two applications in separate repositories or separate HTTPS paths. They use separate storage namespaces, but browser data can still be lost if site data is cleared; use each app's backup feature. This package has not been verified through a live Android installation. Test logging, editing and backups before relying on it for daily records.
+- The app needs HTTPS for service-worker installation; GitHub Pages provides HTTPS.
+- This is a local-first tracker. Records stay in the browser storage on that device/browser. Export a JSON backup regularly. Clearing browser data can erase records.
+- Installing a new version does not merge records across devices.
+- The glucose report button prints only the glucose summary.
+- Follow the father's clinician for medication, glucose targets, meals and exercise. Do not change medication based only on app averages.
