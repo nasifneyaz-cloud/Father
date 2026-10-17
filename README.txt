@@ -20,3 +20,5 @@ IMPORTANT
 - Installing a new version does not merge records across devices.
 - The first tab is the timed Daily Routine (the old check-and-log tab has been removed). The glucose report button prints only the glucose summary.
 - Follow the father's clinician for medication, glucose targets, meals and exercise. Do not change medication based only on app averages.
+
+UPDATE: The Daily Routine tab now has a checkbox for every timed routine step. Ticks save automatically for today's date on this device; use Reset today to clear them.
