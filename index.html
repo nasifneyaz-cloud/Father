@@ -73,7 +73,7 @@ table{width:100%;border-collapse:collapse;margin-top:12px}th,td{text-align:left;
 <div class="metric-grid" id="summaryMetrics"></div>
 <h3>Weekly averages in selected month</h3><div id="weeklyAverages"></div>
 <h3>Monthly timeline</h3><div id="timeline"></div>
-<h3>Saved readings</h3><div id="history"></div>
+<div class="row" style="justify-content:space-between;align-items:end"><h3>Saved readings</h3><div class="field small no-print" style="max-width:220px"><label for="historyFilter">History to show</label><select id="historyFilter"><option value="month">Selected month only</option><option value="all">All saved readings</option></select></div></div><div id="history"></div>
 <div class="print-only"><h2>FatherCare — Blood Sugar Summary</h2><p id="printRange"></p><div id="printSummary"></div></div>
 </section>
 <section class="panel" id="advicePanel">
@@ -122,13 +122,15 @@ function getReadings(){try{return JSON.parse(localStorage.getItem('fc-sugar-read
 function setReadings(a){localStorage.setItem('fc-sugar-readings',JSON.stringify(a))}
 $('sugarForm').addEventListener('submit',e=>{e.preventDefault();const value=Number($('sugarValue').value);if(!Number.isFinite(value)||value<1||value>1500){alert('Enter a valid meter reading from 1 to 1500 mg/dL.');return}const arr=getReadings();arr.push({id:Date.now(),date:$('sugarDate').value,time:$('sugarTime').value,value,notes:$('sugarNotes').value.trim()});arr.sort((a,b)=>b.date.localeCompare(a.date)||a.time.localeCompare(b.time));setReadings(arr);$('sugarValue').value='';$('sugarNotes').value='';renderSugar()});
 $('monthPicker').addEventListener('change',renderSugar);
+$('historyFilter').addEventListener('change',renderSugar);
 function avg(arr){return arr.length?(arr.reduce((s,r)=>s+Number(r.value),0)/arr.length).toFixed(1):'—'}
 function renderSugar(){const month=$('monthPicker').value||iso(today).slice(0,7);const arr=getReadings();const filtered=arr.filter(r=>r.date.startsWith(month));const days=new Set(filtered.map(r=>r.date)).size;
 $('summaryMetrics').innerHTML=`<div class="metric"><span>Monthly mean</span><strong>${avg(filtered)}${filtered.length?' mg/dL':''}</strong></div><div class="metric"><span>Readings saved</span><strong>${filtered.length}</strong></div><div class="metric"><span>Days recorded</span><strong>${days}</strong></div>`;
 const [y,m]=month.split('-').map(Number);let weeks=[];for(let start=1;start<=new Date(y,m,0).getDate();start+=7){let end=Math.min(start+6,new Date(y,m,0).getDate());let rs=filtered.filter(r=>{let d=Number(r.date.slice(8,10));return d>=start&&d<=end});weeks.push({start,end,rs})}
 $('weeklyAverages').innerHTML='<table><thead><tr><th>Period</th><th>Readings</th><th>Average</th></tr></thead><tbody>'+weeks.map(w=>`<tr><td>${String(w.start).padStart(2,'0')}–${String(w.end).padStart(2,'0')} ${month}</td><td>${w.rs.length}</td><td>${avg(w.rs)}${w.rs.length?' mg/dL':''}</td></tr>`).join('')+'</tbody></table>';
 $('timeline').innerHTML=filtered.length?'<table><thead><tr><th>Date</th><th>Morning</th><th>Evening</th></tr></thead><tbody>'+[...new Set(filtered.map(r=>r.date))].sort().reverse().map(d=>{let a=filtered.filter(r=>r.date===d);return `<tr><td>${d}</td><td>${a.filter(r=>r.time==='Morning').map(r=>r.value).join(', ')||'—'}</td><td>${a.filter(r=>r.time==='Evening').map(r=>r.value).join(', ')||'—'}</td></tr>`}).join('')+'</tbody></table>':'<p class="empty">No readings saved for this month yet.</p>';
-$('history').innerHTML=filtered.length?'<table><thead><tr><th>Date</th><th>Time</th><th>Value</th><th>Notes</th><th class="no-print">Action</th></tr></thead><tbody>'+filtered.map(r=>`<tr><td>${r.date}</td><td>${r.time}</td><td>${r.value} mg/dL</td><td>${escapeHtml(r.notes||'')}</td><td class="no-print"><button class="danger" data-delete="${r.id}">Delete</button></td></tr>`).join('')+'</tbody></table>':'<p class="empty">No saved readings for this month.</p>';
+const historyRows=$('historyFilter')?.value==='all'?arr:filtered;
+$('history').innerHTML=historyRows.length?'<table><thead><tr><th>Date</th><th>Time</th><th>Value</th><th>Notes</th><th class="no-print">Action</th></tr></thead><tbody>'+historyRows.map(r=>`<tr><td>${r.date}</td><td>${r.time}</td><td>${r.value} mg/dL</td><td>${escapeHtml(r.notes||'')}</td><td class="no-print"><button class="danger" data-delete="${r.id}">Delete</button></td></tr>`).join('')+'</tbody></table>':'<p class="empty">'+($('historyFilter')?.value==='all'?'No saved readings yet.':'No saved readings for this month.')+'</p>';
 $('history').querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{if(confirm('Delete this reading?')){setReadings(getReadings().filter(r=>r.id!==Number(b.dataset.delete)));renderSugar()}}));
 $('printRange').textContent='Selected month: '+month+' | Readings: '+filtered.length+' | Monthly mean: '+avg(filtered)+(filtered.length?' mg/dL':'');
 $('printSummary').innerHTML=$('summaryMetrics').outerHTML+$('weeklyAverages').outerHTML+$('timeline').outerHTML;
