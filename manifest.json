@@ -1,15 +1,15 @@
 {
   "id": "./",
-  "name": "FatherCare \u2014 Daily Routine & Sugar Tracker",
-  "short_name": "FatherCare",
-  "description": "Timed daily routine and blood sugar record",
+  "name": "Abbu \u2014 Diabetes & Health Dashboard",
+  "short_name": "Abbu",
+  "description": "Private diabetes and health habit tracker for Dad.",
   "lang": "en-IN",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#f5f7f5",
-  "theme_color": "#254c3b",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f2eb",
+  "theme_color": "#163b39",
   "icons": [
     {
       "src": "./icon-192.png",
@@ -22,12 +22,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "./icon-maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
